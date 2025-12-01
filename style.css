@@ -1,0 +1,413 @@
+/* =================================== */
+/* 1. GLOBAL LAYOUT AND TYPOGRAPHY     */
+/* =================================== */
+
+:root {
+    --color-bg: #f4f4f9;
+    --color-card: #ffffff;
+    --color-primary: #3498db;
+    --color-success: #2ecc71;
+    --color-danger: #e74c3c;
+    --color-text: #333;
+    --color-border: #ccc;
+    --color-dark-bg: #2c3e50;
+    --board-size: 50px; /* INCREASED SIZE for better visibility */
+}
+
+body { 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center;     
+    min-height: 100vh;       
+    background-color: var(--color-bg); 
+    margin: 0; 
+    color: var(--color-text);
+}
+h1, h2, h3 { 
+    color: var(--color-text); 
+    margin-top: 0;
+}
+p {
+    font-size: 0.95em;
+}
+.view { 
+    width: 95%; 
+    max-width: 900px; 
+    padding: 30px; 
+    background-color: var(--color-card); 
+    border-radius: 12px; 
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+/* --- Buttons and Controls --- */
+button { 
+    padding: 12px 25px; 
+    font-size: 1em; 
+    cursor: pointer; 
+    border: none; 
+    border-radius: 6px; 
+    transition: background-color 0.2s, opacity 0.2s; 
+    font-weight: bold;
+}
+button:hover:not(:disabled) { 
+    opacity: 0.9; 
+}
+.back-button { 
+    align-self: flex-start;
+    margin-bottom: 25px; 
+    background-color: var(--color-dark-bg); 
+    color: white; 
+}
+
+/* =================================== */
+/* 2. MAIN MENU & SETUP VIEWS          */
+/* =================================== */
+
+#main-menu-options {
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    margin-top: 30px;
+    width: 100%;
+}
+#main-menu-options button { 
+    width: 80%; 
+    max-width: 350px; 
+    margin: 10px 0; 
+    background-color: var(--color-primary); 
+    color: white; 
+}
+#main-menu-options #quit-button { 
+    background-color: var(--color-danger); 
+}
+
+/* Game Setup View */
+#game-setup-view {
+    text-align: left;
+}
+.player-config { 
+    display: flex; 
+    align-items: center; 
+    gap: 15px; 
+    margin-bottom: 12px; 
+    padding: 8px;
+    border-bottom: 1px solid #eee;
+}
+.player-config label { 
+    width: 110px; 
+    font-weight: bold; 
+    font-size: 0.9em;
+    flex-shrink: 0;
+}
+select { 
+    padding: 8px; 
+    border-radius: 4px; 
+    border: 1px solid var(--color-border);
+    flex-grow: 1;
+}
+#player-config-list {
+    margin-top: 20px;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+#start-battle-button {
+    background-color: var(--color-success); 
+    color: white; 
+    padding: 15px 35px;
+    margin-top: 20px;
+}
+
+/* AI Comparison Setup */
+#comparison-selector-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+#comparison-selector-container h3 {
+    margin: 5px 0;
+}
+#start-comparison-button {
+    background-color: #f39c12; 
+    color: white; 
+    padding: 15px 35px;
+}
+
+/* =================================== */
+/* 3. GAME BOARD & CARDS               */
+/* =================================== */
+
+#game-board-view {
+    /* Set max-width to tightly wrap the board for better centering */
+    max-width: 550px; 
+    display: block; 
+    text-align: center;
+}
+
+#game-info { 
+    margin-bottom: 10px; 
+    font-size: 1.1em; 
+    text-align: center; 
+}
+
+/* Deck info container styling (for all player stats) */
+#deck-info-display {
+    text-align: center;
+    font-size: 0.9em;
+    display: block; 
+    margin-bottom: 15px; 
+    padding: 10px; 
+    border: 1px solid #ddd; 
+    border-radius: 8px; 
+    background-color: #f9f9f9;
+}
+#deck-info-display span {
+    display: inline-block; 
+    margin: 5px 10px;
+}
+
+#game-board {
+    /* Board is now larger and centered */
+    display: grid;
+    gap: 1px;
+    border: 6px solid var(--color-dark-bg);
+    padding: 2px;
+    background-color: var(--color-dark-bg);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin: 20px auto;
+}
+.cell {
+    width: var(--board-size); 
+    height: var(--board-size); 
+    background-color: #111;
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+    border-radius: 3px; 
+    cursor: pointer; 
+    transition: background-color 0.1s;
+}
+.cell:hover { 
+    background-color: #333; 
+}
+.card {
+    width: 90%; 
+    height: 90%; 
+    border-radius: 4px;
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+    font-size: 1.1em;
+    font-weight: bold; 
+    color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4); 
+    line-height: 1;
+    cursor: default;
+}
+
+/* Player/Bot Colors */
+.player-0 { background-color: #e74c3c; } /* Red */
+.player-1 { background-color: #3498db; } /* Blue */
+.player-2 { background-color: #2ecc71; } /* Green */
+.player-3 { background-color: #ffa500; } /* Orange (Human) */
+
+/* Human Controls & Hand */
+#human-controls {
+    margin-top: 25px; 
+    padding: 20px; 
+    border: 2px solid #ffa500; 
+    border-radius: 10px; 
+    background-color: #fff7e6;
+    width: 100%; 
+    max-width: 800px; 
+    display: none; 
+    flex-direction: column; 
+    gap: 15px;
+    margin-left: auto;
+    margin-right: auto;
+}
+#human-hand {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.hand-card-slot {
+    width: 50px;
+    height: 50px;
+    border: 2px dashed #999;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.1s;
+    font-size: 0.9em;
+    font-weight: bold;
+}
+.hand-card-slot:hover:not(.empty) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+.hand-card-slot.selected {
+    border: 3px solid #ffa500;
+    transform: scale(1.1);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+.hand-card-slot.empty {
+    opacity: 0.5;
+    cursor: default;
+}
+
+#confirm-move-button { 
+    background-color: var(--color-success); 
+    color: white; 
+    opacity: 0.5; 
+    cursor: not-allowed; 
+}
+#confirm-move-button.ready { 
+    cursor: pointer; 
+    opacity: 1; 
+    background-color: #27ae60; 
+}
+
+#play-again-button {
+    background-color: var(--color-primary);
+    color: white;
+}
+
+/* =================================== */
+/* 4. AI DESCRIPTION & COMPARISON      */
+/* =================================== */
+
+.ai-model-card { 
+    padding: 15px; 
+    border-radius: 8px; 
+    margin-bottom: 15px; 
+    text-align: left;
+    width: 80%;
+}
+.ai-model-card h4 { 
+    font-size: 1.2em; 
+}
+.ai-model-card.p0 { border: 2px solid #e74c3c; background-color: #fceae8; }
+.ai-model-card.p1 { border: 2px solid #3498db; background-color: #e5f1f9; }
+.ai-model-card.p2 { border: 2px solid #2ecc71; background-color: #ebf9f1; }
+
+/* Comparison Results/Visualizer */
+#visualization-container {
+    width: 100%;
+    margin: 20px 0;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #eee;
+}
+#visualization-board {
+    display: grid;
+    margin: 10px auto;
+    gap: 1px;
+    border: 3px solid #333;
+    background-color: #333;
+}
+#history-log {
+    max-height: 200px;
+    overflow-y: auto;
+    text-align: left;
+    margin-top: 15px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    font-family: monospace;
+    font-size: 0.8em;
+}
+.log-entry {
+    margin-bottom: 5px;
+}
+.log-entry.win {
+    color: var(--color-success);
+    font-weight: bold;
+}
+
+
+/* =================================== */
+/* 5. MODAL STYLES (Deck Preview)      */
+/* =================================== */
+
+.modal {
+    /* Covers the entire screen */
+    position: fixed;
+    z-index: 100; 
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
+    display: none; /* Hidden by default */
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 25px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 900px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 36px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    cursor: pointer;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: #333;
+    text-decoration: none;
+}
+
+.deck-sets-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+    text-align: left;
+}
+
+.deck-set-card {
+    border: 1px solid var(--color-border);
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+.deck-set-card h4 {
+    margin-bottom: 5px;
+    color: var(--color-primary);
+}
+.deck-set-card p {
+    word-break: break-all;
+    font-family: monospace;
+    font-size: 0.9em;
+}

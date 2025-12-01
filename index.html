@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Punto Game Enhanced</title>
+    <!-- Link to the external CSS file -->
+    <link rel="stylesheet" href="style.css"> 
+</head>
+<body>
+
+    <!-- ============================================== -->
+    <!-- 1. MAIN MENU VIEW -->
+    <!-- ============================================== -->
+    <div id="main-menu" class="view">
+        <h1>Punto: Enhanced Edition</h1>
+        <p>Selamat datang! Pilih mode permainan Anda:</p>
+        <div id="main-menu-options">
+            <button onclick="APP.showView('game-setup-view')">🏆 Battle (Main Game)</button>
+            <button onclick="APP.showView('ai-comparison-setup-view')">🧠 AI Battle (Model Comparison)</button>
+            <button onclick="APP.showView('ai-description-view')">📜 AI Description</button>
+            <button id="quit-button" onclick="APP.quitGame()">❌ Quit Game</button>
+        </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- 2. GAME SETUP VIEW (Custom Battle) -->
+    <!-- ============================================== -->
+    <div id="game-setup-view" class="view" style="display:none;">
+        <button class="back-button" onclick="APP.showView('main-menu')">← Kembali ke Menu</button>
+        <h2>Setup Game Battle</h2>
+        <p>Atur 1 hingga 4 pemain. Setidaknya harus ada 1 Pemain Manusia dan 1 Bot.</p>
+
+        <div id="player-config-list">
+            <!-- Dynamic player selectors will be inserted here by JS -->
+        </div>
+
+        <div style="text-align: center;">
+            <button id="start-battle-button">Mulai Battle</button>
+        </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- 3. GAME VIEW (The actual game board) -->
+    <!-- ============================================== -->
+    <div id="game-board-view" class="view" style="display:none;">
+        <button class="back-button" onclick="APP.resetGameAndShowMenu()">← Kembali ke Menu</button>
+        <h1>Punto Game</h1>
+
+        <div id="game-info">
+            <p>Giliran: <span id="current-player-display"></span></p>
+            <p id="winner-display"></p>
+        </div>
+
+        <!-- Full-width deck info for all players -->
+        <div id="deck-info-display">
+            <!-- Deck info for all players will be inserted here by JS -->
+        </div>
+
+        <div id="game-board"></div>
+        
+        <!-- Game End Controls -->
+        <div id="game-end-controls" style="margin-top: 20px; display: none;">
+            <button id="play-again-button" onclick="APP.restartCurrentGame()">Mulai Game Baru</button>
+        </div>
+
+        <!-- Human Controls with 3-Card Hand -->
+        <div id="human-controls" class="player-3">
+            <h3>Giliran Anda! Pilih Kartu di Tangan dan Posisi di Papan.</h3>
+            
+            <div id="human-hand">
+                <!-- Hand cards will be populated here -->
+            </div>
+
+            <button id="confirm-move-button" disabled>Konfirmasi Langkah</button>
+        </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- 4. AI DESCRIPTION VIEW -->
+    <!-- ============================================== -->
+    <div id="ai-description-view" class="view" style="display:none;">
+        <button class="back-button" onclick="APP.showView('main-menu')">← Kembali ke Menu</button>
+        <h2>📜 Deskripsi Model AI Punto</h2>
+        <p>Punto memiliki tiga model AI yang berbeda, masing-masing dengan strategi yang unik.</p>
+        
+        <div class="ai-model-card p0">
+            <h4>Greedy-Aggressive</h4>
+            <p>Strategi: Prioritas utama adalah membuat koneksi 4-in-a-row sendiri (menyerang). Hanya memblokir lawan jika mereka memiliki ancaman kemenangan instan yang jelas.</p>
+        </div>
+        <div class="ai-model-card p1">
+            <h4>Blocker-Defensive</h4>
+            <h4>Strategi: Prioritas utama adalah mencari dan memblokir ancaman 3-in-a-row atau 2-in-a-row lawan (bertahan). Akan menyerang jika tidak ada ancaman yang harus diblokir.</h4>
+        </div>
+        <div class="ai-model-card p2">
+            <h4>Balanced-Tactician</h4>
+            <p>Strategi: Menggunakan skor bobot untuk menyeimbangkan antara menyerang dan bertahan (misalnya, memberi bobot lebih besar pada pertahanan, tetapi tetap mencari peluang menyerang).</p>
+        </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- 5. AI COMPARISON SETUP VIEW -->
+    <!-- ============================================== -->
+    <div id="ai-comparison-setup-view" class="view" style="display:none;">
+        <button class="back-button" onclick="APP.showView('main-menu')">← Kembali ke Menu</button>
+        <h2>🧠 Setup AI Battle (1 vs 1)</h2>
+        <p>Bandingkan dua model AI melalui 20 putaran game preset untuk melihat perbedaan winrate mereka.</p>
+
+        <div id="comparison-selector-container">
+            <h3>Bot 1: 
+                <select id="bot-a-select">
+                    <!-- Options populated by JS -->
+                </select>
+            </h3>
+            <h3 style="color: var(--color-danger);">VERSUS</h3>
+            <h3>Bot 2: 
+                <select id="bot-b-select">
+                    <!-- Options populated by JS -->
+                </select>
+            </h3>
+        </div>
+        
+        <button id="view-decks-button" style="margin-top: 15px; background-color: #555; color: white;">Lihat 20 Set Kartu</button>
+
+
+        <div style="text-align: center; margin-top: 20px;">
+            <button id="start-comparison-button">Mulai Perbandingan (20 Game)</button>
+        </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- 6. AI COMPARISON VISUALIZER VIEW -->
+    <!-- ============================================== -->
+    <div id="ai-comparison-visualizer-view" class="view" style="display:none;">
+        <button class="back-button" onclick="APP.resetComparison()">← Kembali ke Setup Perbandingan</button>
+        <h2>⚔️ Simulasi AI Battle</h2>
+        <p id="simulation-status">Siap memulai simulasi...</p>
+        
+        <div id="visualization-container">
+            <div id="visualization-board">
+                <!-- Board visualization will be rendered here -->
+            </div>
+            <div id="history-log">
+                <!-- Game history/moves will be logged here -->
+            </div>
+        </div>
+
+        <div id="comparison-results-output">
+            <!-- Final results inserted here by JS -->
+        </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- 7. DECK MODAL (POP-UP) -->
+    <!-- ============================================== -->
+    <div id="deck-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-button" id="close-deck-modal">&times;</span>
+            <div id="deck-modal-content">
+                <!-- Deck sets will be rendered here by JS -->
+            </div>
+        </div>
+    </div>
+    
+    <script src="game.js"></script>
+    
+</body>
+</html>
